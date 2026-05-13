@@ -1,0 +1,1062 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Profile</title>
+    <link rel="stylesheet" href="profile.css">
+</head>
+<style>
+    * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+        font-family: system-ui, -apple-system, sans-serif;
+    }
+
+    body {
+        background: linear-gradient(to bottom right, #f3e7e9, #e3eeff);
+        min-height: 100vh;
+    }
+
+    .container {
+        max-width: 1280px;
+        margin: 0 auto;
+        padding: 2rem;
+    }
+
+    /* Profile Header */
+    .profile-header {
+        background: white;
+        border-radius: 12px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        margin-bottom: 2rem;
+        overflow: hidden;
+    }
+
+    .profile-info {
+        display: flex;
+        align-items: center;
+        padding: 2rem;
+        gap: 2rem;
+    }
+
+    .profile-photo {
+        width: 200px;
+        height: 100px;
+        border-radius: 50%;
+        border: 4px solid rgb(0, 0, 0);
+
+    }
+
+    .profile-text h1 {
+        color: #2d3748;
+        font-size: 2rem;
+        margin-bottom: 0.5rem;
+    }
+
+    .profile-text p {
+        color: #718096;
+        /* margin-bottom: 0.25rem; */
+        padding: 0px 20px;
+    }
+
+    /* Content Layout */
+    .content-wrapper {
+        display: grid;
+        grid-template-columns: 1fr 2fr;
+        gap: 2rem;
+    }
+
+    /* Cards */
+    .personal-info-card {
+        background: white;
+        border-radius: 12px;
+        padding: 1.5rem;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .academic-info {
+        background: white;
+        border-radius: 12px;
+        padding: 1.5rem;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .card-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1.5rem;
+    }
+
+    .card-header h2 {
+        color: #2d3748;
+        font-size: 1.5rem;
+    }
+
+    /* Info Items */
+    .info-list {
+        display: flex;
+        flex-direction: column;
+        gap: 1.5rem;
+    }
+
+    .info-item {
+        display: flex;
+        justify-content: space-between;
+        padding: 0.5rem 0;
+        border-bottom: 1px solid #e2e8f0;
+    }
+
+    .info-item .label {
+        color: #718096;
+        font-weight: 500;
+    }
+
+
+    /* Tabs */
+    .tabs {
+        display: flex;
+        overflow-x: auto;
+        background: white;
+        border-radius: 8px;
+        margin-bottom: 1rem;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .tab-btn {
+        padding: 1rem 1.5rem;
+        border: none;
+        background: none;
+        color: #718096;
+        font-weight: 500;
+        cursor: pointer;
+        transition: all 0.3s;
+        white-space: nowrap;
+    }
+
+    .tab-btn.active {
+        color: #4a90e2;
+        border-bottom: 2px solid #4a90e2;
+    }
+
+    .tab-content {
+        display: none;
+        background: white;
+        border-radius: 12px;
+        padding: 1.5rem;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    }
+
+    .tab-content.active {
+        display: block;
+    }
+
+    /* Info Grid */
+    .info-grid {
+        display: grid;
+        grid-template-columns: repeat(2, 1fr);
+        gap: 1.5rem;
+    }
+
+    /* Buttons */
+    .edit-btn {
+        background: #4a90e2;
+        color: white;
+        border: none;
+        padding: 0.5rem 1rem;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: background 0.3s;
+        margin-left: auto;
+    }
+
+    .edit-btn:hover {
+        background: #357abd;
+    }
+
+    .close-btn {
+        margin-left: auto;
+        margin-bottom: auto;
+        color: rgb(0, 0, 0);
+        border: none;
+        padding: 0.5rem 1rem;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: background 0.3s;
+    }
+
+
+
+    .close-btn a {
+        text-decoration-style: none;
+    }
+
+    /* Modal */
+    .modal {
+        display: none;
+        position: fixed;
+        top: 0;
+        left: 0;
+        width: 100%;
+        height: 100%;
+        background: rgba(0, 0, 0, 0.5);
+        z-index: 1000;
+        overflow: scroll;
+    }
+
+    .modal-content {
+        background: white;
+        border-radius: 12px;
+        width: 90%;
+        max-width: 600px;
+        margin: 2rem auto;
+        padding: 2rem;
+        position: relative;
+    }
+
+    .modal-header {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        margin-bottom: 1.5rem;
+    }
+
+    .close {
+        font-size: 1.5rem;
+        cursor: pointer;
+        color: #718096;
+    }
+
+    /* Form */
+    .form-group {
+        margin-bottom: 1rem;
+    }
+
+    .form-group label {
+        display: block;
+        margin-bottom: 0.5rem;
+        color: #4a5568;
+    }
+
+    .form-group input,
+    .form-group textarea,
+    .form-group select {
+        width: 100%;
+        padding: 0.5rem;
+        border: 1px solid #e2e8f0;
+        border-radius: 6px;
+        font-size: 1rem;
+    }
+
+    .modal-footer {
+        margin-top: 2rem;
+        display: flex;
+        justify-content: flex-end;
+        gap: 1rem;
+    }
+
+    .save-btn,
+    .cancel-btn {
+        padding: 0.5rem 1rem;
+        border-radius: 6px;
+        cursor: pointer;
+        font-weight: 500;
+    }
+
+    .save-btn {
+        background: #4a90e2;
+        color: white;
+        border: none;
+    }
+
+    .cancel-btn {
+        background: #e2e8f0;
+        color: #4a5568;
+        border: none;
+    }
+
+    /* Toast */
+    .toast {
+        display: none;
+        position: fixed;
+        bottom: 2rem;
+        right: 2rem;
+        background: #48bb78;
+        color: white;
+        padding: 1rem 2rem;
+        border-radius: 6px;
+        box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+        z-index: 1000;
+    }
+
+
+    /* Resume Styles */
+    .resume-container {
+        padding: 1.5rem;
+    }
+
+    .resume-section {
+        text-align: center;
+        margin: 2rem 0;
+    }
+
+    .upload-btn,
+    .replace-btn {
+        display: inline-block;
+        background: #4a90e2;
+        color: white;
+        padding: 0.75rem 1.5rem;
+        border-radius: 6px;
+        cursor: pointer;
+        transition: background 0.3s;
+        margin-top: 1rem;
+    }
+
+    .upload-btn:hover,
+    .replace-btn:hover {
+        background: #357abd;
+    }
+
+    .resume-info {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+        padding: 1rem;
+        background: #f8f9fa;
+        border-radius: 6px;
+    }
+
+    .resume-actions {
+        display: flex;
+        gap: 1rem;
+    }
+
+    #resumeName {
+        font-weight: 500;
+        color: #2d3748;
+    }
+
+    /* Responsive Design */
+    @media (max-width: 768px) {
+        .content-wrapper {
+            grid-template-columns: 1fr;
+        }
+
+        .quick-info-card {
+            grid-template-columns: repeat(2, 1fr);
+        }
+
+        .info-grid {
+            grid-template-columns: 1fr;
+        }
+
+        .profile-info {
+            flex-direction: column;
+            text-align: center;
+        }
+
+        .tabs {
+            flex-wrap: nowrap;
+            overflow-x: auto;
+        }
+    }
+
+
+    /* Button glow effect */
+    .button-glow {
+        animation: glowButton 1s ease-in-out infinite alternate;
+        border-radius: 8px;
+    }
+
+    /* Text highlight with gradient effect */
+    /* .text-highlight {
+    background-image: linear-gradient(90deg, #ff6a00, #ee0979);
+    background-size: 200% auto;
+    color: white;
+    background-clip: text;
+    text-fill-color: transparent;
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    animation: textMove 5s ease-in-out infinite alternate;
+} */
+
+    .text-highlight {
+        display: inline-block;
+        /* Ensure text is treated as a block-level element */
+        color: #ee0979;
+        /* Default color for the text */
+        animation: textZoom 3s ease-in-out infinite alternate;
+
+    }
+
+    /* Zoom-in/zoom-out animation */
+    @keyframes textZoom {
+        0% {
+            transform: scale(1);
+            /* Start at normal size */
+            opacity: 1;
+        }
+
+        50% {
+            transform: scale(1.2);
+            /* Zoom in */
+            opacity: 0.8;
+        }
+
+        100% {
+            transform: scale(1);
+            /* Zoom out back to normal size */
+            opacity: 1;
+        }
+    }
+
+    /* Bottom border highlight animation */
+    .bottom-glow {
+        position: relative;
+        /* Ensures the pseudo-element is positioned relative to this container */
+        padding-bottom: 5px;
+        animation: borderPulse 1s ease-in-out infinite alternate;
+    }
+
+
+
+    /* Glow effect for the bottom border (using pseudo-element) */
+    .bottom-glow::after {
+        content: '';
+        position: absolute;
+        left: 0;
+        bottom: 0;
+        width: 100%;
+        height: 4px;
+        background: linear-gradient(90deg, #ff6a00, #ee0979);
+        /* orange-pink glow */
+        animation: glowLine 1.5s ease-in-out infinite alternate;
+        border-radius: 5px;
+    }
+
+    /* Bottom glow line animation */
+    @keyframes glowLine {
+        from {
+            opacity: 0.5;
+            transform: scaleX(0.7);
+        }
+
+        to {
+            opacity: 1;
+            transform: scaleX(1);
+        }
+    }
+
+
+    .tab-content {
+        padding: 1rem;
+        font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    }
+
+    .tab-content h2 {
+        font-size: 1.5rem;
+        font-weight: 700;
+        margin-bottom: 1rem;
+        color: #2d3748;
+    }
+
+    table {
+        width: 100%;
+        border-collapse: collapse;
+        background-color: #ffffff;
+        border: 1px solid #e2e8f0;
+        box-shadow: 0 2px 6px rgba(0, 0, 0, 0.05);
+        border-radius: 6px;
+        overflow: hidden;
+    }
+
+    thead {
+        background-color: #f7fafc;
+        color: #4a5568;
+    }
+
+    th,
+    td {
+        padding: 0.75rem 1rem;
+        text-align: left;
+        border-bottom: 1px solid #e2e8f0;
+        font-size: 0.95rem;
+    }
+
+    tbody tr:hover {
+        background-color: #f1f5f9;
+        transition: backgr
+</style>
+
+<body>
+    <div class="container">
+
+        <!-- Profile Header -->
+        <div class="profile-header">
+            <div class="profile-info">
+                <img src="C:\Users\krish\OneDrive\Desktop\Agile-Methodoloy Project\JobConnect\userSide\templates\aadhi.jpg" alt="Profile Photo"class="profile-photo">
+                <div class="profile-text">
+                    <h1 id="fullName">{{ user.username }} </h1>
+                    <p>{{ user_profile.about_me }}</p>
+                </div>
+                <a href="{% url 'user_dashboard' %}" class="close-btn"><img
+                        src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAB4AAAAeCAYAAAA7MK6iAAAAAXNSR0IArs4c6QAAAXhJREFUSEvt1r8vBUEQwPHva1BoVILC6/wDOpVCp9GJSKgJ/wL+BIlQSkhQ6URUKn+AVkXhRynRSBTcJLOy1t7bnXVyzbvm3rvs3Gdmbm/e69DS0WnJpRSWuCVN+gT4tBZQAkuMYIuKnWkSJtwKh6gr1IxbYFl7BCyr9qDnST0fAyu5bc+Fw0ofgRkFb4AJa9tz4DrUr9iMp+AU6p6xtNuE94Jz0SK8DraiZjwGl6ImPIT/imbjPhwbDjvVnbat41DXS9yWF/tjyPiwDAYZAv7RJCz3lfl+Kh98eAE4/2d4HrgIYfk+BYwB15qAX/EAsFG9r3PAUJDgO3AF7AEfkVbPAk9VxXcuru51cr80PnwIrCae9z6wHoF/ORb4DRgGZFTeBwl0AZler8BI03CsC873d7ArJnbtO19LxX3Yf8z9Vks3ijbXCzBaOKPDsGdgPLxYt6s3q/dxtyF4rSriIBeWddM6HgcLE5AxegncxuJT/7kKzXRYa/AXg/aCH31NgGkAAAAASUVORK5CYII=" /></a>
+
+
+            </div>
+
+        </div>
+
+        <!-- Main Content -->
+        <div class="content-wrapper">
+            <!-- Left Column - Personal Info -->
+            <div class="personal-info-card">
+                <div class="card-header">
+                    <h2>Personal Information</h2>
+                    <button onclick="openModal('personalInfoModal')" class="edit-btn">Edit</button>
+                </div>
+
+                <div class="info-list">
+                    <div class="info-item">
+                        <span class="label">Email:</span>
+                        <span id="email">{{ user.email }}</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="label">Phone:</span>
+                        <span id="phone">{{ user.phone_number }}</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="label">Gender:</span>
+                        <span id="gender">{{ user_profile.gender }}</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="label">Date of Birth:</span>
+                        <span id="dob">{{ user_profile.date_of_birth }}</span>
+                    </div>
+                    <div class="info-item">
+                        <span class="label">Location:</span>
+                        <span id="location">{{ user_profile.location }}</span>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Right Column -->
+            <div class="main-content">
+
+                <!-- Tabs Navigation -->
+                <div class="tabs">
+                    <button class="tab-btn active" onclick="switchTab('academic')">Academic Information</button>
+                    <button class="tab-btn" onclick="switchTab('additional')">Additional Information</button>
+                    <button class="tab-btn" id="resume" onclick="switchTab('resume')">Resume</button>
+                    <button class="tab-btn" onclick="switchTab('applied')">Applied Jobs</button>
+                    <button class="tab-btn" onclick="switchTab('settings')">Account Settings</button>
+                </div>
+
+                <!-- Tab Content -->
+                <div id="academicTab" class="tab-content active">
+                    <div class="academic-info">
+                        <div class="card-header">
+                            <h2>Academic Information</h2>
+                            <button onclick="openModal('academicInfoModal')" class="edit-btn">Edit</button>
+                        </div>
+                        <div class="info-grid">
+                            <div class="info-item">
+                                <span class="label">10th Percentage:</span>
+                                <span id="tenthPercentage">{{ user_profile.tenth_percentage }} %</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="label">12th Percentage:</span>
+                                <span id="twelfthPercentage">{{ user_profile.twelfth_percentage }} %</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="label">Diploma Status:</span>
+                                <span id="diplomaStatus">{{ user_profile.diploma_status }} </span>
+                            </div>
+                            <div class="info-item">
+                                <span class="label">UG CGPA:</span>
+                                <span id="ugCgpa">{{ user_profile.ug_cgpa }} CGPA</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="label">PG Status:</span>
+                                <span id="pgStatus">{{ user_profile.pg_status }}</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="label">Backlogs History:</span>
+                                <span id="backlogsHistory">{{ user_profile.backlogs_history }}</span>
+                            </div>
+                            <div class="info-item">
+                                <span class="label">Current Backlogs:</span>
+                                <span id="currentBacklogs">{{ user_profile.current_backlogs }}</span>
+                            </div>
+
+
+                        </div>
+                    </div>
+                </div>
+
+                <div id="additionalTab" class="tab-content active">
+                    <div class="space-y-8">
+                        <div class="card">
+                            <div class="card-header">
+                                <h2><i class="fa-solid fa-link"></i> Professional Links</h2>
+                                <button onclick="openModal('linksModal')" class="edit-btn">Edit</button>
+                            </div>
+                            <div class="info-list">
+                                <div class="info-item">
+                                    <span class="label flex items-center gap-2"><i class="fab fa-linkedin icon"></i> LinkedIn</span>
+                                    <a href="{{ user_profile.linkedin_url|default:'#' }}" target="_blank" id="linkedinLink" class="text-blue-600 hover:underline">{{ user_profile.linkedin_url|default:'Not Provided' }}</a>
+                                </div>
+                                <div class="info-item">
+                                    <span class="label flex items-center gap-2"><i class="fab fa-github icon"></i> GitHub</span>
+                                    <a href="{{ user_profile.github_url|default:'#' }}" target="_blank" id="githubLink" class="text-blue-600 hover:underline">{{ user_profile.github_url|default:'Not Provided' }}</a>
+                                </div>
+                                <div class="info-item">
+                                    <span class="label flex items-center gap-2"><i class="fa-solid fa-globe icon"></i> Portfolio</span>
+                                    <a href="{{ user_profile.portfolio_url|default:'#' }}" target="_blank" id="portfolioLink" class="text-blue-600 hover:underline">{{ user_profile.portfolio_url|default:'Not Provided' }}</a>
+                                </div>
+                            </div>
+                        </div>
+
+                        <div class="card">
+                            <div class="card-header">
+                                <h2><i class="fa-solid fa-award"></i> Certifications & Awards</h2>
+                                <button onclick="openModal('certificationsModal')" class="edit-btn">Edit</button>
+                            </div>
+                            <div id="certificationsList" class="text-gray-700 whitespace-pre-line">
+                                {{ user_profile.certifications|default:'No certifications listed.' }}
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <div id="resumeTab" class="tab-content">
+                    <div class="resume-container">
+                        <h2>Resume</h2>
+                        <div id="noResumeSection" class="resume-section">
+                            <p>No resume uploaded yet.</p>
+                            <label for="resumeUpload" class="upload-btn">Upload Resume</label>
+                            <input type="file" id="resumeUpload" accept=".pdf;.doc;.docx" style="display: none;">
+                        </div>
+                        <div id="resumeSection" class="resume-section" style="display: none;">
+                            <div class="resume-info">
+                                <span id="resumeName"></span>
+                                <div class="resume-actions">
+                                    <label for="replaceResume" class="replace-btn">Replace</label>
+                                    <input type="file" id="replaceResume" accept=".pdf,.doc,.docx"
+                                        style="display: none;">
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+
+                <div id="appliedTab" class="tab-content">
+                    <h2 class="text-xl font-bold mb-4">Applied Jobs</h2>
+
+                    {% if applied_jobs %}
+                    <div class="overflow-x-auto">
+                        <table class="min-w-full bg-white border border-gray-300 rounded shadow">
+                            <thead class="bg-gray-100">
+                                <tr>
+                                    <th class="text-left px-4 py-2 border-b">Job Role</th>
+                                    <th class="text-left px-4 py-2 border-b">Company</th>
+                                    <th class="text-left px-4 py-2 border-b">Status</th>
+                                    <th class="text-left px-4 py-2 border-b">Applied On</th>
+                                    <th class="text-left px-4 py-2 border-b">Feedback</th>
+                                </tr>
+                            </thead>
+                            <tbody>
+                                {% for app in applied_jobs %}
+                                <tr class="hover:bg-gray-50">
+                                    <td class="px-4 py-2 border-b">{{ app.job.job_role }}</td>
+                                    <td class="px-4 py-2 border-b">{{ app.company.company_name }}</td>
+                                    <td class="px-4 py-2 border-b">{{ app.status }}</td>
+                                    <td class="px-4 py-2 border-b">{{ app.application_date|date:"Y-m-d H:i" }}</td>
+                                    <td class="px-4 py-2 border-b">{{ app.feedback|default:"N/A" }}</td>
+                                </tr>
+                                {% endfor %}
+                            </tbody>
+                        </table>
+                    </div>
+                    {% else %}
+                    <p>No applied jobs yet.</p>
+                    {% endif %}
+                </div>
+
+
+                <div id="settingsTab" class="tab-content">
+                    <h2>Account Settings</h2>
+                    <p>Account settings will be available soon.</p>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Personal Info Modal -->
+    <div id="personalInfoModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Edit Personal Information</h2>
+                <span class="close" onclick="closeModal('personalInfoModal')">&times;</span>
+            </div>
+            <form id="personalInfoForm" method="POST" action="{% url 'edit_personal' username=user.username %}">
+                {% csrf_token %}
+
+                <div class="form-group">
+                    <label for="editName">Username:</label>
+                    <input type="text" id="editName" name="editName" value="{{ user.username }}" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="editEmail">Email:</label>
+                    <input type="email" id="editEmail" name="editEmail" value="{{ user.email }}" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="editPhone">Phone:</label>
+                    <input type="tel" id="editPhone" name="editPhone" value="{{ user.phone_number }}" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="editGender">Gender:</label>
+                    <select id="editGender" name="editGender" required>
+                        <option value="">Select Gender</option>
+                        <option value="Male" {% if user_profile.gender == 'Male' %}selected{% endif %}>Male</option>
+                        <option value="Female" {% if user_profile.gender == 'Female' %}selected{% endif %}>Female</option>
+                        <option value="Other" {% if user_profile.gender == 'Other' %}selected{% endif %}>Other</option>
+                    </select>
+                </div>
+
+                <div class="form-group">
+                    <label for="editDob">Date of Birth:</label>
+                    <input type="date" id="editDob" name="editDob" value="{{ user_profile.date_of_birth }}">
+                </div>
+
+                <div class="form-group">
+                    <label for="editlocation">Location:</label>
+                    <input type="text" id="editlocation" name="editlocation" value="{{ user_profile.location }}"
+                        required>
+                </div>
+                <div class="form-group">
+                    <label for="editabout_me">About Me:</label>
+                    <textarea id="editabout_me" name="editabout_me">{{ user_profile.about_me }}</textarea>
+                </div>
+
+                <div class="modal-footer">
+                    <button type="submit" class="save-btn">Save Changes</button>
+                    <button onclick="closeModal('personalInfoModal')" class="cancel-btn">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Academic Info Modal -->
+    <div id="academicInfoModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Edit Academic Information</h2>
+                <span class="close" onclick="closeModal('academicInfoModal')">&times;</span>
+            </div>
+            <form id="academicInfoForm" method="POST" action="{% url 'edit_academic' username=user.username %}">
+                {% csrf_token %}
+
+                <div class="form-group">
+                    <label for="editTenthPercentage">10th Percentage:</label>
+                    <input type="text" id="editTenthPercentage" name="editTenthPercentage"
+                        value="{{ user_profile.tenth_percentage }}" required>
+                </div>
+                <div class="form-group">
+                    <label for="editTwelfthPercentage">12th Percentage:</label>
+                    <input type="text" id="editTwelfthPercentage" name="editTwelfthPercentage"
+                        value="{{ user_profile.twelfth_percentage }}" required>
+                </div>
+                <div class="form-group">
+                    <label for="editdiplomaStatus">Diploma Status:</label>
+                    <input type="text" id="editdiplomaStatus" name="editdiplomaStatus"
+                        value="{{ user_profile.diploma_status }}" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="editUgCgpa">UG CGPA:</label>
+                    <input type="text" id="editUgCgpa" name="editUgCgpa" value="{{ user_profile.ug_cgpa }}" required>
+                </div>
+
+                <div class="form-group">
+                    <label for="editpgStatus">PG Status:</label>
+                    <input type="text" id="editpgStatus" name="editpgStatus" value="{{ user_profile.pg_status }}"
+                        required>
+                </div>
+
+                <div class="form-group">
+                    <label for="editBacklogsHistory">Backlogs History:</label>
+                    <select id="editBacklogsHistory" name="editBacklogsHistory">
+                        <option value="">Select YES/NO</option>
+                        <option value="No" {% if user_profile.backlogs_history == 'No' %}selected{% endif %}>NO</option>
+                        <option value="Yes" {% if user_profile.backlogs_history == 'Yes' %}selected{% endif %}>YES
+                        </option>
+                    </select>
+                </div>
+                <div class="form-group">
+                    <label for="editCurrentBacklogs">Current Backlogs:</label>
+                    <input type="number" id="editCurrentBacklogs" name="editCurrentBacklogs"
+                        value="{{ user_profile.current_backlogs }}" min="0">
+                </div>
+
+                <div class="modal-footer">
+                    <button type="submit" class="save-btn">Save Changes</button>
+                    <button type="button" class="cancel-btn" onclick="closeModal('academicInfoModal')">Cancel</button>
+                </div>
+            </form>
+        </div>
+    </div>
+
+    <div id="toast" class="toast"></div>
+
+    <div id="linksModal" class="modal">
+    <div class="modal-content">
+        <div class="modal-header">
+            <h2>Edit Professional Links</h2>
+            <span class="close" onclick="closeModal('linksModal')">&times;</span>
+        </div>
+        <form id="linksForm" method="POST" action="{% url 'edit_links' username=user.username %}">
+            {% csrf_token %}
+            <div class="form-group">
+                <label for="editLinkedin">LinkedIn URL:</label>
+                <input type="url" id="editLinkedin" name="linkedin_url" value="{{ user_profile.linkedin_url }}" placeholder="https://www.linkedin.com/in/yourprofile">
+            </div>
+            <div class="form-group">
+                <label for="editGithub">GitHub URL:</label>
+                <input type="url" id="editGithub" name="github_url" value="{{ user_profile.github_url }}" placeholder="https://github.com/yourusername">
+            </div>
+            <div class="form-group">
+                <label for="editPortfolio">Portfolio/Website URL:</label>
+                <input type="url" id="editPortfolio" name="portfolio_url" value="{{ user_profile.portfolio_url }}" placeholder="https://yourportfolio.com">
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="cancel-btn" onclick="closeModal('linksModal')">Cancel</button>
+                <button type="submit" class="save-btn">Save Changes</button>
+            </div>
+        </form>
+    </div>
+</div>
+
+    <div id="certificationsModal" class="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Edit Certifications & Awards</h2>
+                <span class="close" onclick="closeModal('certificationsModal')">&times;</span>
+            </div>
+            <form id="certificationsForm" method="POST" action="{% url 'edit_certifications' username=user.username %}">
+                {% csrf_token %}
+                <div class="form-group">
+                    <label for="editCertifications">List your certifications (one per line):</label>
+                    <textarea id="editCertifications" name="certifications" rows="6" placeholder="e.g., AWS Certified Cloud Practitioner&#10;Google Analytics IQ Certification">{{ user_profile.certifications }}</textarea>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="cancel-btn" onclick="closeModal('certificationsModal')">Cancel</button>
+                    <button type="submit" class="save-btn">Save Changes</button>
+                </div>
+            </form>
+        </div>
+    </div>
+    <script>
+        // Tab Switching
+        function switchTab(tabId) {
+            // Hide all tab contents
+            document.querySelectorAll('.tab-content').forEach(tab => {
+                tab.classList.remove('active');
+            });
+
+            // Remove active class from all tab buttons
+            document.querySelectorAll('.tab-btn').forEach(btn => {
+                btn.classList.remove('active');
+            });
+
+            // Show selected tab content and activate button
+            document.getElementById(tabId + 'Tab').classList.add('active');
+            document.querySelector(`[onclick="switchTab('${tabId}')"]`).classList.add('active');
+        }
+
+        // Modal Functions
+        function openModal(modalId) {
+            document.getElementById(modalId).style.display = 'block';
+        }
+
+        function closeModal(modalId) {
+            document.getElementById(modalId).style.display = 'none';
+        }
+
+        // Toast Notification
+        function showToast(message) {
+            const toast = document.getElementById('toast');
+            toast.textContent = message;
+            toast.style.display = 'block';
+
+            setTimeout(() => {
+                toast.style.display = 'none';
+            }, 3000);
+        }
+
+        // Personal Info Form Submission
+        function savePersonalInfo(event) {
+            event.preventDefault();
+
+            // Close modal and show notification
+            closeModal('personalInfoModal');
+            showToast('Personal information updated successfully');
+        }
+
+        function saveAcademicInfo(event) {
+            event.preventDefault();
+
+            // Close modal and show notification
+            closeModal('academicInfoModal');
+            showToast('Academic information updated successfully');
+        }
+
+
+        const resumeUploaded = "{{ resume_uploaded|yesno:'true,false' }}" === "true";
+
+        window.onload = function () {
+            if (resumeUploaded) {
+                document.getElementById('noResumeSection').style.display = 'none';
+                document.getElementById('resumeSection').style.display = 'block';
+                document.getElementById('resumeName').innerText = "{{ user_profile.resume.name|default:'' }}";
+            } else {
+                document.getElementById('noResumeSection').style.display = 'block';
+                document.getElementById('resumeSection').style.display = 'none';
+            }
+        }
+
+        // Resume Upload Handling
+        document.getElementById('resumeUpload').addEventListener('change', handleResumeUpload);
+        document.getElementById('replaceResume').addEventListener('change', handleResumeUpload);
+
+        function handleResumeUpload(event) {
+            const file = event.target.files[0];
+            if (file) {
+                const formData = new FormData();
+                formData.append('resume', file);
+
+
+                fetch("{% url 'upload_resume' username=user.username %}", {
+                    method: 'POST',
+                    body: formData,
+                    headers: {
+                        'X-CSRFToken': getCookie('csrftoken'),
+                    },
+                })
+                    .then(response => response.json())
+                    .then(data => {
+                        if (data.status === 'success') {
+                            // Show the resume section and hide the no-resume section
+                            document.getElementById('noResumeSection').style.display = 'none';
+                            document.getElementById('resumeSection').style.display = 'block';
+
+                            // Update the resume name display
+                            document.getElementById('resumeName').textContent = data.filename;
+
+                            // Show success message
+                            showToast(data.message);
+                        } else {
+                            showToast(data.message, 'error');
+                            console.log(data.message, 'error');
+                        }
+                    })
+                    .catch(error => {
+                        showToast('Error uploading resume', 'error');
+                        console.error('Error:', error);
+                    });
+
+                // Reset the file input
+                event.target.value = '';
+            }
+        }
+
+        // Helper function to get CSRF token
+        function getCookie(name) {
+            let cookieValue = null;
+            if (document.cookie && document.cookie !== '') {
+                const cookies = document.cookie.split(';');
+                for (let i = 0; i < cookies.length; i++) {
+                    const cookie = cookies[i].trim();
+                    if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                        cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                        break;
+                    }
+                }
+            }
+            return cookieValue;
+        }
+        // function handleResumeUpload(event) {
+        //     const file = event.target.files[0];
+        //     if (file) {
+        //         // Show the resume section and hide the no-resume section
+        //         document.getElementById('noResumeSection').style.display = 'none';
+        //         document.getElementById('resumeSection').style.display = 'block';
+
+        //         // Update the resume name display
+        //         document.getElementById('resumeName').textContent = file.name;
+
+        //         // Show success message
+        //         showToast('Resume uploaded successfully');
+
+        //         // Reset the file input
+        //         event.target.value = '';
+        //     }
+        // }
+
+        // Close modal when clicking outside
+        window.onclick = function (event) {
+            if (event.target.classList.contains('modal')) {
+                event.target.style.display = 'none';
+            }
+        }
+
+        // Initialize with academic tab active
+        document.addEventListener('DOMContentLoaded', () => {
+            switchTab('academic');
+        });
+
+
+        document.addEventListener('DOMContentLoaded', () => {
+            const urlParams = new URLSearchParams(window.location.search);
+            const highlightField = urlParams.get('highlight');
+
+            if (highlightField) {
+                const element = document.getElementById(highlightField);
+
+                if (element) {
+                    if (element.id === "resume") {
+                        element.classList.add('text-highlight');
+                        element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+                        setTimeout(() => {
+                            element.classList.remove('text-highlight');
+                        }, 3000);
+                    } else {
+                        const parentInfoItem = element.closest('.info-item');
+                        if (parentInfoItem) {
+                            parentInfoItem.classList.add('bottom-glow');
+                            parentInfoItem.scrollIntoView({ behavior: 'smooth', block: 'center' });
+
+                            setTimeout(() => {
+                                parentInfoItem.classList.remove('bottom-glow');
+                            }, 3000);
+                        }
+                    }
+                }
+            }
+        });
+
+
+
+
+    </script>
+</body>
+
+</html>

@@ -1,0 +1,461 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Signup</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Poppins:ital,wght@0,100;0,200;0,300;0,400;0,500;0,600;0,700;0,800;0,900;1,100;1,200;1,300;1,400;1,500;1,600;1,700;1,800;1,900&display=swap');
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: "Poppins", sans-serif;
+        }
+
+        body {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            min-height: 100vh;
+            display: flex;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .auth-container {
+            position: relative;
+            width: 100%;
+            max-width: 1200px;
+            padding: 20px;
+        }
+
+        .role-switcher {
+            display: flex;
+            justify-content: center;
+            margin-bottom: 30px;
+        }
+
+        .role-tabs {
+            display: flex;
+            background: rgba(255, 255, 255, 0.2);
+            backdrop-filter: blur(10px);
+            border-radius: 50px;
+            padding: 5px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        .role-tab {
+            padding: 10px 25px;
+            cursor: pointer;
+            color: white;
+            font-weight: 500;
+            border-radius: 50px;
+            transition: all 0.3s ease;
+            text-align: center;
+        }
+
+        .role-tab.active {
+            background: white;
+            color: #764ba2;
+            box-shadow: 0 4px 15px rgba(0, 0, 0, 0.1);
+        }
+
+        .form-container {
+            position: relative;
+            width: 100%;
+        }
+
+        .form-cointainer {
+            background: white;
+            border-radius: 20px;
+            padding: 40px;
+            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.2);
+            width: 100%;
+            max-width: 450px;
+            margin: 0 auto;
+            transform-style: preserve-3d;
+            transition: all 0.5s ease;
+        }
+
+        .cointainer-1,
+        .cointainer-2 {
+            display: none;
+            animation: fadeIn 0.5s ease;
+        }
+
+        @keyframes fadeIn {
+            from {
+                opacity: 0;
+                transform: translateY(20px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
+        }
+
+        .cointainer-1.active,
+        .cointainer-2.active {
+            display: block;
+        }
+
+        .form {
+            display: flex;
+            flex-direction: column;
+        }
+
+        h1 {
+            color: #764ba2;
+            text-align: center;
+            margin-bottom: 30px;
+            font-size: 2rem;
+        }
+
+        .form-input {
+            display: flex;
+            flex-direction: column;
+            gap: 20px;
+        }
+
+        .input-group {
+            position: relative;
+        }
+
+        .form-input input {
+            width: 100%;
+            padding: 15px 20px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: #f9f9f9;
+        }
+
+        .form-input input:focus {
+            border-color: #764ba2;
+            background: white;
+            box-shadow: 0 0 0 3px rgba(118, 75, 162, 0.2);
+            outline: none;
+        }
+
+        .form-input input::placeholder {
+            color: #aaa;
+        }
+
+        .form-input select {
+            width: 100%;
+            padding: 15px 20px;
+            border: 2px solid #e0e0e0;
+            border-radius: 10px;
+            font-size: 1rem;
+            transition: all 0.3s ease;
+            background: #f9f9f9;
+            appearance: none;
+            color: #555;
+        }
+
+        .form-input select:focus {
+            border-color: #764ba2;
+            background: white;
+            box-shadow: 0 0 0 3px rgba(118, 75, 162, 0.2);
+            outline: none;
+        }
+
+        .form-links {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 15px 0;
+        }
+
+        .form-links a {
+            color: #764ba2;
+            text-decoration: none;
+            font-size: 0.9rem;
+            font-weight: 500;
+            transition: all 0.3s ease;
+        }
+
+        .form-links a:hover {
+            text-decoration: underline;
+        }
+
+        .form-input input[type="submit"] {
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            color: white;
+            font-weight: 600;
+            border: none;
+            cursor: pointer;
+            padding: 15px;
+            margin-top: 10px;
+            transition: all 0.3s ease;
+        }
+
+        .form-input input[type="submit"]:hover {
+            transform: translateY(-3px);
+            box-shadow: 0 10px 20px rgba(118, 75, 162, 0.3);
+        }
+
+        .form-input input[type="submit"]:active {
+            transform: translateY(0);
+        }
+
+        .social-login {
+            margin-top: 30px;
+            text-align: center;
+        }
+
+        .social-login p {
+            color: #777;
+            margin-bottom: 15px;
+            position: relative;
+        }
+
+        .social-login p::before,
+        .social-login p::after {
+            content: "";
+            position: absolute;
+            top: 50%;
+            width: 30%;
+            height: 1px;
+            background: #e0e0e0;
+        }
+
+        .social-login p::before {
+            left: 0;
+        }
+
+        .social-login p::after {
+            right: 0;
+        }
+
+        .social-icons {
+            display: flex;
+            justify-content: center;
+            gap: 15px;
+        }
+
+        .social-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            font-size: 1.2rem;
+            transition: all 0.3s ease;
+        }
+
+        .social-icon:hover {
+            transform: translateY(-5px);
+        }
+
+        .facebook {
+            background: #3b5998;
+        }
+
+        .google {
+            background: #db4437;
+        }
+
+        .twitter {
+            background: #1da1f2;
+        }
+
+        .password-toggle {
+            position: absolute;
+            right: 15px;
+            top: 50%;
+            transform: translateY(-50%);
+            cursor: pointer;
+            color: #777;
+        }
+
+        @media (max-width: 768px) {
+            .form-cointainer {
+                padding: 30px 20px;
+            }
+
+            .role-tab {
+                padding: 8px 15px;
+                font-size: 0.9rem;
+            }
+        }
+    </style>
+</head>
+
+<body>
+    <div class="auth-container">
+        <!-- Role Switcher Tabs -->
+
+
+        <!-- Login Container -->
+        <div class="form-container">
+
+            <div class="cointainer-2 active">
+                <div class="form-cointainer">
+                    <div class="form">
+                        <h1>Company Login</h1>
+                        <form action="{% url 'com-login' %}" class="form-input" method="POST">
+                            {% csrf_token %}
+                            <div class="input-group">
+                                <input type="email" id="Email" name="Email" placeholder="Email" required>
+                            </div>
+                            <div class="input-group">
+                                <input type="password" id="password" name="password" placeholder="Password">
+                                <i class="fas fa-eye password-toggle" id="togglePassword"></i>
+                            </div>
+                            {% if error %}
+                            <div style="color: red;">
+                                {{ error }}
+                            </div>
+                            {% endif %}
+                            <input type="hidden" id="role" name="role" value="user">
+                            <input type="submit" value="Login">
+                        </form>
+                        <div class="social-login">
+                            <p>Or login with</p>
+                            <div class="social-icons">
+                                <div class="social-icon facebook"><i class="fab fa-facebook-f"></i></div>
+                                <div class="social-icon google"><i class="fab fa-google"></i></div>
+                                <div class="social-icon twitter"><i class="fab fa-twitter"></i></div>
+                            </div>
+                        </div>
+                        <div class="form-links" style="justify-content: center; margin-top: 20px;">
+                            <p>Don't have an account? <a href="" id="signup">Sign up</a></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+
+
+            <!-- Signup Container -->
+            <div class="cointainer-1">
+                <div class="form-cointainer">
+                    <div class="form">
+                        <h1>Company Signup</h1>
+                        <form action="{% url 'com-register'%}" class="form-input" method="POST">
+                            {% csrf_token %}
+
+                            <div class="input-group">
+                                <input type="email" id="Email" name="Email" placeholder="Email" required>
+                            </div>
+                            <div class="input-group">
+                                <input type="text" id="Company_name" name="Company_name" placeholder="Company Name"
+                                    required>
+                            </div>
+                            <div class="input-group">
+                                <input type="text" id="Company_location" name="Company_location" placeholder="Location"
+                                    required>
+                            </div>
+                            <div class="input-group">
+                                <input type="password" id="Password" name="Password" placeholder="Password" required>
+                                <i class="fas fa-eye password-toggle" id="toggleSignupPassword"></i>
+                            </div>
+                            <div class="input-group">
+                                <input type="password" id="confirm_password" name="confirm_password"
+                                    placeholder="Confirm Password" required>
+                                <i class="fas fa-eye password-toggle" id="toggleConfirmPassword"></i>
+                            </div>
+                            <input type="submit" value="Register">
+                        </form>
+                        <div class="social-login">
+                            <p>Or sign up with</p>
+                            <div class="social-icons">
+                                <div class="social-icon facebook"><i class="fab fa-facebook-f"></i></div>
+                                <div class="social-icon google"><i class="fab fa-google"></i></div>
+                                <div class="social-icon twitter"><i class="fab fa-twitter"></i></div>
+                            </div>
+                        </div>
+                        <div class="form-links" style="justify-content: center; margin-top: 20px;">
+                            <p>Already have an account? <a href="" id="login">Login</a></p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
+
+    <script>
+        document.addEventListener("DOMContentLoaded", function () {
+            const signupContainer = document.querySelector(".cointainer-1");
+            const loginContainer = document.querySelector(".cointainer-2");
+            const loginLink = document.getElementById("login");
+            const signupLink = document.getElementById("signup");
+
+
+            // Toggle between login and signup
+            loginLink?.addEventListener("click", function (event) {
+                event.preventDefault();
+                signupContainer.classList.remove("active");
+                loginContainer.classList.add("active");
+            });
+
+            signupLink?.addEventListener("click", function (event) {
+                event.preventDefault();
+                loginContainer.classList.remove("active");
+                signupContainer.classList.add("active");
+            });
+
+
+
+            // Password toggle functionality
+            const togglePassword = document.getElementById("togglePassword");
+            const password = document.getElementById("password");
+
+            const toggleSignupPassword = document.getElementById("toggleSignupPassword");
+            const signupPassword = document.getElementById("Password");
+
+            const toggleConfirmPassword = document.getElementById("toggleConfirmPassword");
+            const confirmPassword = document.getElementById("confirm_password");
+
+            if (togglePassword && password) {
+                togglePassword.addEventListener("click", function () {
+                    const type = password.getAttribute("type") === "password" ? "text" : "password";
+                    password.setAttribute("type", type);
+                    this.classList.toggle("fa-eye-slash");
+                });
+            }
+
+            if (toggleSignupPassword && signupPassword) {
+                toggleSignupPassword.addEventListener("click", function () {
+                    const type = signupPassword.getAttribute("type") === "password" ? "text" : "password";
+                    signupPassword.setAttribute("type", type);
+                    this.classList.toggle("fa-eye-slash");
+                });
+            }
+
+            if (toggleConfirmPassword && confirmPassword) {
+                toggleConfirmPassword.addEventListener("click", function () {
+                    const type = confirmPassword.getAttribute("type") === "password" ? "text" : "password";
+                    confirmPassword.setAttribute("type", type);
+                    this.classList.toggle("fa-eye-slash");
+                });
+            }
+
+            // Password confirmation validation
+            const signupForm = document.querySelector(".cointainer-1 form");
+
+            if (signupForm) {
+                signupForm.addEventListener("submit", function (event) {
+                    const password = document.getElementById("Password").value;
+                    const confirmPassword = document.getElementById("confirm_password").value;
+
+                    if (password !== confirmPassword) {
+                        event.preventDefault();
+                        alert("Passwords do not match. Please try again.");
+                    }
+                });
+            }
+        });
+    </script>
+</body>
+
+</html>

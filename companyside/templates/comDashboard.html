@@ -1,0 +1,1422 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Company Portal - Job Recruitment</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+    <style>
+        :root {
+            --primary-color: #3498db;
+            --secondary-color: #2980b9;
+            --accent-color: #e74c3c;
+            --light-color: #ecf0f1;
+            --dark-color: #2c3e50;
+            --success-color: #2ecc71;
+            --warning-color: #f39c12;
+        }
+
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+        }
+
+        body {
+            background-color: #f5f7fa;
+            color: #333;
+        }
+
+        .container {
+            display: flex;
+            min-height: 100vh;
+        }
+
+        /* Sidebar */
+        .sidebar {
+            width: 250px;
+            background-color: var(--dark-color);
+            color: white;
+            padding: 20px 0;
+            transition: all 0.3s;
+        }
+
+        .sidebar-header {
+            padding: 0 20px 20px;
+            border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+        }
+
+        .sidebar-header h3 {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .sidebar-header h3 i {
+            color: var(--primary-color);
+        }
+
+        .company-logo {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+            background-color: #fff;
+            padding: 2px;
+        }
+
+        .sidebar-menu {
+            padding: 20px 0;
+        }
+
+        .menu-item {
+            padding: 12px 20px;
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            cursor: pointer;
+            transition: all 0.2s;
+        }
+
+        .menu-item:hover,
+        .menu-item.active {
+            background-color: rgba(255, 255, 255, 0.1);
+            border-left: 3px solid var(--primary-color);
+        }
+
+        .menu-item i {
+            width: 20px;
+            text-align: center;
+        }
+
+        /* Main Content */
+        .main-content {
+            flex: 1;
+            padding: 20px;
+            background-color: #f5f7fa;
+        }
+
+        .header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 20px;
+            border-bottom: 1px solid #ddd;
+        }
+
+        .header h2 {
+            color: var(--dark-color);
+        }
+
+        .user-profile {
+            display: flex;
+            align-items: center;
+            gap: 10px;
+        }
+
+        .user-profile img {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        /* Dashboard Cards */
+        .dashboard-cards {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+            margin-bottom: 30px;
+        }
+
+        .card {
+            background-color: white;
+            border-radius: 8px;
+            padding: 20px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            transition: transform 0.3s;
+        }
+
+        .card:hover {
+            transform: translateY(-5px);
+        }
+
+        .card-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 15px;
+        }
+
+        .card-icon {
+            width: 50px;
+            height: 50px;
+            border-radius: 8px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 20px;
+            color: white;
+        }
+
+        .card-icon.jobs {
+            background-color: var(--primary-color);
+        }
+
+        .card-icon.applicants {
+            background-color: var(--success-color);
+        }
+
+        .card-icon.views {
+            background-color: var(--warning-color);
+        }
+
+        .card-icon.active {
+            background-color: var(--accent-color);
+        }
+
+        .card h3 {
+            font-size: 24px;
+            margin-bottom: 5px;
+        }
+
+        .card p {
+            color: #777;
+            font-size: 14px;
+        }
+
+        /* Jobs Section */
+        .section-title {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 20px;
+        }
+
+        .section-title h3 {
+            color: var(--dark-color);
+        }
+
+        .btn {
+            padding: 8px 16px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-weight: 500;
+            transition: all 0.2s;
+        }
+
+        .btn-primary {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        .btn-primary:hover {
+            background-color: var(--secondary-color);
+        }
+
+        .btn-danger {
+            background-color: var(--accent-color);
+            color: white;
+        }
+
+        .btn-danger:hover {
+            background-color: #c0392b;
+        }
+
+        .btn-success {
+            background-color: var(--success-color);
+            color: white;
+        }
+
+        .btn-success:hover {
+            background-color: #27ae60;
+        }
+
+        /* Jobs Table */
+        .jobs-table {
+            width: 100%;
+            background-color: white;
+            border-radius: 8px;
+            box-shadow: 0 2px 10px rgba(0, 0, 0, 0.05);
+            overflow: hidden;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+        }
+
+        th,
+        td {
+            padding: 15px;
+            text-align: left;
+            border-bottom: 1px solid #eee;
+        }
+
+        th {
+            background-color: #f8f9fa;
+            font-weight: 600;
+            color: var(--dark-color);
+        }
+
+        tr:hover {
+            background-color: #f8f9fa;
+        }
+
+
+        #vjobstatus {
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        #vjobstatus.active {
+            background-color: #d4edda;
+            width: 40px;
+            color: #155724;
+        }
+
+        #vjobstatus.inactive {
+            background-color: #f8d7da;
+            width: 40px;
+            color: #721c24;
+        }
+
+
+        .status {
+            padding: 5px 10px;
+            border-radius: 20px;
+            font-size: 12px;
+            font-weight: 500;
+        }
+
+        .status.active {
+            background-color: #d4edda;
+            color: #155724;
+        }
+
+        .status.inactive {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+
+        .status.applied {
+            background-color: #e2e3e5;
+            color: #383d41;
+        }
+
+        .status.under-review {
+            background-color: #fff3cd;
+            color: #856404;
+        }
+
+        .status.accepted {
+            background-color: #d4edda;
+            color: #155724;
+        }
+
+        .status.rejected {
+            background-color: #f8d7da;
+            color: #721c24;
+        }
+
+        .action-buttons {
+            display: flex;
+            gap: 5px;
+        }
+
+        .action-btn {
+            padding: 5px 10px;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            font-size: 12px;
+        }
+
+        /* Modal */
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            overflow: scroll;
+        }
+
+        .modal-content {
+            background-color: white;
+            width: 90%;
+            max-width: 600px;
+            border-radius: 8px;
+
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+        }
+
+
+        .modal-header {
+            padding: 15px 20px;
+            background-color: var(--primary-color);
+            color: white;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .modal-header h3 {
+            font-weight: 500;
+        }
+
+        .close-btn {
+            background: none;
+            border: none;
+            color: white;
+            font-size: 20px;
+            cursor: pointer;
+        }
+
+        .modal-body {
+            padding: 20px;
+        }
+
+        .form-group {
+            margin-bottom: 15px;
+        }
+
+        .form-group label {
+            display: block;
+            margin-bottom: 5px;
+            font-weight: 500;
+        }
+
+        .form-control {
+            width: 100%;
+            padding: 10px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            font-size: 14px;
+        }
+
+        .form-control:focus {
+            outline: none;
+            border-color: var(--primary-color);
+        }
+
+        textarea.form-control {
+            min-height: 100px;
+            resize: vertical;
+        }
+
+        .modal-footer {
+            padding: 15px 20px;
+            background-color: #f8f9fa;
+            display: flex;
+            justify-content: flex-end;
+            gap: 10px;
+        }
+
+        /* Resume Viewer */
+        .resume-viewer {
+            width: 100%;
+            height: 500px;
+            border: 1px solid #ddd;
+            margin-top: 15px;
+        }
+
+        /* Responsive */
+        @media (max-width: 768px) {
+            .container {
+                flex-direction: column;
+            }
+
+            .sidebar {
+                width: 100%;
+                padding: 10px;
+            }
+
+            .sidebar-menu {
+                display: flex;
+                overflow-x: auto;
+                padding: 10px 0;
+            }
+
+            .menu-item {
+                flex-direction: column;
+                padding: 10px;
+                font-size: 12px;
+                min-width: 80px;
+                text-align: center;
+            }
+
+            .menu-item span {
+                margin-top: 5px;
+            }
+
+            .dashboard-cards {
+                grid-template-columns: 1fr;
+            }
+
+            table {
+                display: block;
+                overflow-x: auto;
+            }
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            z-index: 1000;
+            justify-content: center;
+            align-items: center;
+            overflow: auto;
+            /* Changed from 'scroll' to 'auto' */
+            padding: 20px;
+            /* Add some padding */
+        }
+
+        .modal-content {
+            background-color: white;
+            width: 90%;
+            max-width: 800px;
+            border-radius: 8px;
+            box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+            display: flex;
+            flex-direction: column;
+            max-height: 90vh;
+        }
+
+        .modal-body {
+            padding: 20px;
+            overflow-y: auto;
+            flex: 1;
+        }
+    </style>
+</head>
+
+<body>
+    <div class="container">
+        <!-- Sidebar -->
+        <div class="sidebar">
+            <div class="sidebar-header">
+                <h3><i class="fas fa-briefcase"></i>Company Portal</h3>
+            </div>
+
+            <div class="sidebar-menu">
+                <div class="menu-item active">
+                    <i class="fas fa-tachometer-alt"></i>
+                    <span>Dashboard</span>
+                </div>
+                <div class="menu-item" id="applicationsMenuItem">
+                    <i class="fas fa-file-alt"></i>
+                    <span>Applications</span>
+                </div>
+                <div class="menu-item">
+                    <i class="fas fa-users"></i>
+                    <span>Settings</span>
+                </div>
+                <div class="menu-item">
+                    <i class="fas fa-sign-out-alt"></i>
+                    <a href="{% url 'company_logout' %}" style="text-decoration: none; color: inherit;">Logout</a>
+                </div>
+            </div>
+        </div>
+
+        <!-- Main Content -->
+        <div class="main-content">
+            <!-- Dashboard View -->
+            <div id="dashboardView">
+                <div class="header">
+                    <h2>Company Dashboard</h2>
+                    {% if user_logged_in %}
+                    <div class="user-profile">
+                        <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="User">
+                        <span>{{ company.company_name }}</span>
+                    </div>
+                    {% endif %}
+                </div>
+
+                <!-- Dashboard Cards -->
+                <div class="dashboard-cards">
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="card-icon jobs">
+                                <i class="fas fa-briefcase"></i>
+                            </div>
+                            <div>
+                                <h3>{{ active_jobs_count }}</h3>
+                                <p>Active Jobs</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="card-icon applicants">
+                                <i class="fas fa-users"></i>
+                            </div>
+                            <div>
+                                <h3>{{ applicants_count }}</h3>
+                                <p>Applicants</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="card-icon views">
+                                <i class="fas fa-eye"></i>
+                            </div>
+                            <div>
+                                <h3>{{ job_views_count }}</h3>
+                                <p>Job Views</p>
+                            </div>
+                        </div>
+                    </div>
+                    <div class="card">
+                        <div class="card-header">
+                            <div class="card-icon active">
+                                <i class="fas fa-check-circle"></i>
+                            </div>
+                            <div>
+                                <h3>{{ hired_count }}</h3>
+                                <p>Hired</p>
+                            </div>
+                        </div>
+                    </div>
+                </div>
+
+                <!-- Jobs Section -->
+                <div class="section-title">
+                    <h3>Recent Job Posts</h3>
+                    <button class="btn btn-primary" id="addJobBtn">
+                        <i class="fas fa-plus"></i> Add New Job
+                    </button>
+                </div>
+                <!-- Jobs Table -->
+                <div class="jobs-table">
+                    <table id="jobsTable">
+                        <thead>
+                            <tr>
+                                <th>Job Role</th>
+                                <th>Job Type</th>
+                                <th>Status</th>
+                                <th>Posted Date</th>
+                                <th>Deadline</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for job in jobs %}
+                            <tr>
+                                <td>{{ job.job_role }}</td>
+                                <td>{{ job.job_type }}</td>
+                                <td>
+                                    <span
+                                        class="status {% if job.is_active == 1 %} active {% else %} inactive {% endif %}">
+                                        {% if job.is_active == 1 %} Active {% else %} Inactive {% endif %}
+                                    </span>
+                                </td>
+                                <td>{{ job.posted_at }}</td>
+                                <td>{{ job.application_deadline }}</td>
+                                <td>
+                                    <div class="action-buttons">
+                                        <button class="action-btn btn-primary" onclick="viewJob('{{ job.id }}')"><i
+                                                class="fas fa-eye"></i></button>
+                                        <button class="action-btn btn-success" onclick="editJob('{{ job.id }}')"><i
+                                                class="fas fa-edit"></i></button>
+                                        <form action="" method="POST" style="display:inline;">
+                                            {% csrf_token %}
+                                            <button type="submit" class="action-btn btn-danger"><i
+                                                    class="fas fa-trash"></i></button>
+                                        </form>
+                                    </div>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+
+            <!-- Applications View (initially hidden) -->
+            <div id="applicationsView" style="display: none;">
+                <div class="header">
+                    <h2>Job Applications</h2>
+                    {% if user_logged_in %}
+                    <div class="user-profile">
+                        <img src="https://randomuser.me/api/portraits/men/32.jpg" alt="User">
+                        <span>{{ company.company_name }}</span>
+                    </div>
+                    {% endif %}
+                </div>
+
+                <!-- Applications Table -->
+                <div class="section-title">
+                    <h3>All Applications</h3>
+                    <div class="filter-options">
+                        <select id="statusFilter" class="form-control" style="width: 150px; padding: 8px;">
+                            <option value="">All Statuses</option>
+                            <option value="Applied">Applied</option>
+                            <option value="Under Review">Under Review</option>
+                            <option value="Accepted">Accepted</option>
+                            <option value="Rejected">Rejected</option>
+                        </select>
+                    </div>
+                </div>
+
+                <div class="jobs-table">
+                    <table id="applicationsTable">
+                        <thead>
+                            <tr>
+                                <th>Applicant Name</th>
+                                <th>Job Role</th>
+                                <th>Applied Date</th>
+                                <th>Status</th>
+                                <th>Last Updated</th>
+                                <th>Actions</th>
+                            </tr>
+                        </thead>
+                        <tbody>
+                            {% for application in applications %}
+                            <tr>
+                                <td>{{ application.user }}</td>
+                                <td>{{ application.job.job_role }}</td>
+                                <td>{{ application.application_date|date:"Y-m-d" }}</td>
+                                <td>
+                                    <span class="status {{ application.status|lower|cut:' ' }}">
+                                        {{ application.status }}
+                                    </span>
+                                </td>
+                                <td>{{ application.status_changed_date|date:"Y-m-d" }}</td>
+                                <td>
+                                    <div class="action-buttons">
+                                        <button class="action-btn btn-primary"
+                                            onclick="viewApplication('{{ application.user }}' ,'{{ application.job.job_role }}', '{{ application.application_date }}', '{{ application.status }}' ,'{{ application.resume}}')">
+                                            <i class="fas fa-eye"></i> View
+                                        </button>
+                                        <button class="action-btn btn-success"
+                                            onclick="updateApplication('{{ application.id }}')">
+                                            <i class="fas fa-edit"></i> Update
+                                        </button>
+                                    </div>
+                                </td>
+                            </tr>
+                            {% endfor %}
+                        </tbody>
+                    </table>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- Add Job Modal -->
+    <div class="modal" id="addJobModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Add New Job</h2>
+                <button class="close-btn" id="closeModalBtn">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form method="POST" id="jobForm" action="{% url 'add_job' %}">
+                    {% csrf_token %}
+
+                    <div class="form-group">
+                        <label for="job_role">Job Role:</label>
+                        <input type="text" id="job_role" class="form-control" name="job_role" placeholder="job_role"
+                            required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="job_type">Job Type:</label>
+                        <select id="job_type" class="form-control" name="job_type" required>
+                            <option value="">Select Job Type</option>
+                            <option value="Full-time">Full-time</option>
+                            <option value="Part-time">Part-time</option>
+                            <option value="Internship">Internship</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="location">Location</label>
+                        <input type="text" id="location" class="form-control" name="location" placeholder="Location"
+                            required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="CGPA">CGPA Requirement:</label>
+                        <input type="text" name="CGPA" id="CGPA" class="form-control" placeholder="CGPA" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="LPA">LPA:</label>
+                        <input type="text" id="LPA" class="form-control" name="LPA" placeholder="LPA" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="required_skill">Required Skills:</label>
+                        <textarea name="required_skill" id="required_skill" rows="3" cols="30"
+                            placeholder="Required Skill" required></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="qualification">Qualification:</label>
+                        <select id="qualification" class="form-control" name="qualification" required>
+                            <option value="">Select Qualification</option>
+                            <option value="B.Tech">B.Tech</option>
+                            <option value="BCA">BCA</option>
+                            <option value="BE">BE</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="experience">Experience:</label>
+                        <select id="experience" class="form-control" name="experience" required>
+                            <option value="">Select Experience</option>
+                            <option value="Fresher">Fresher</option>
+                            <option value="0-2 years">0-2 yearse</option>
+                            <option value="3-5 years">3-5 years</option>
+                        </select>
+                    </div>
+
+
+                    <div class="form-group">
+                        <label for="description">Job Description:</label>
+                        <textarea name="description" id="description" placeholder="Description" rows="5"
+                            cols="60"></textarea>
+                    </div>
+
+
+                    <div class="form-group">
+                        <label for="application_deadline">Application Deadline:</label>
+                        <input type="date" name="application_deadline" id="application_deadline" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="register_count ">Register Count:</label>
+                        <input type="number" name="register_count" id="register_count" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="status">Active Status:</label>
+                        <select id="status" class="form-control" name="status" required>
+                            <option value="True">Active</option>
+                            <option value="False">Inactive</option>
+                        </select>
+                    </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-danger" id="cancelBtn">Cancel</button>
+                <button type="submit" class="btn btn-success" id="saveJobBtn">Post Job</button>
+            </div>
+            </form>
+        </div>
+    </div>
+
+
+    <!-- View Job Modal -->
+    <div class="modal" id="viewJobModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>View Job Details</h2>
+                <button class="close-btn" id="closeJobModalBtn">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="job-details"></div>
+                <div class="form-group">
+                    <label>Job Role:</label>
+                    <p id="vjobrole"></p>
+                </div>
+                <div class="form-group">
+                    <label>Job Type:</label>
+                    <p id="vjobtype"></p>
+                </div>
+
+                <div class="form-group">
+                    <label>Location</label>
+                    <p id="vlocation"></p>
+                </div>
+
+                <div class="form-group">
+                    <label>CGPA Requirement:</label>
+                    <p id="vrequiredCGPA"></p>
+                </div>
+
+                <div class="form-group">
+                    <label>LPA:</label>
+                    <p id="vLPA"></p>
+                </div>
+
+                <div class="form-group">
+                    <label>Required Skills:</label>
+                    <p id="vrequiredskill"></p>
+                </div>
+
+                <div class="form-group">
+                    <label>Qualification:</label>
+                    <p id="vqualification"></p>
+                </div>
+
+                <div class="form-group">
+                    <label for="experience">Experience:</label>
+                    <p id="vexperience"></p>
+                </div>
+
+
+                <div class="form-group">
+                    <label for="description">Job Description:</label>
+                    <p id="vdescription"></p>
+                </div>
+
+
+                <div class="form-group">
+                    <label for="application_deadline">Application Deadline:</label>
+                    <p id="vapplicationdeadline"></p>
+                </div>
+
+                <div class="form-group">
+                    <label for="register_count">No.of Registration:</label>
+                    <p id="vregistercount"></p>
+                </div>
+
+                <div class="form-group">
+                    <label>Job Status:</label>
+                    <span id="vjobstatus"
+                        class="status {% if vjobstatus == Active %} active {% else %} inactive {% endif %}">
+                    </span>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-danger" id="closeJobViewBtn">Close</button>
+            </div>
+
+        </div>
+    </div>
+
+
+    <!-- Edit Job Modal -->
+    <div class="modal" id="editJobModal" style="display: none;">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Edit Job Job</h2>
+                <button class="close-btn" id="closeeditModalBtn">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form method="POST" id="editjobForm">
+                    {% csrf_token %}
+
+                    <div class="form-group">
+                        <label for="job_role">Job Role:</label>
+                        <input type="text" id="edit_job_role" class="form-control" name="edit_job_role"
+                            placeholder="job_role" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="job_type">Job Type:</label>
+                        <select id="edit_job_type" class="form-control" name="edit_job_type" required>
+                            <option value="">Select Job Type</option>
+                            <option value="Full-time">Full-time</option>
+                            <option value="Part-time">Part-time</option>
+                            <option value="Internship">Internship</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="location">Location</label>
+                        <input type="text" id="edit_location" class="form-control" name="edit_location" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="CGPA">CGPA Requirement:</label>
+                        <input type="text" name="edit_CGPA" id="edit_CGPA" class="form-control" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="LPA">LPA:</label>
+                        <input type="text" id="edit_LPA" class="form-control" name="edit_LPA" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="required_skill">Required Skills:</label>
+                        <textarea name="edit_required_skill" id="edit_required_skill" rows="3" cols="30"
+                            required></textarea>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="qualification">Qualification:</label>
+                        <select id="edit_qualification" class="form-control" name="edit_qualification" required>
+                            <option value="">Select Qualification</option>
+                            <option value="B.Tech">B.Tech</option>
+                            <option value="BCA">BCA</option>
+                            <option value="BE">BE</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="experience">Experience:</label>
+                        <select id="edit_experience" class="form-control" name="edit_experience" required>
+                            <option value="">Select Experience</option>
+                            <option value="Fresher">Fresher</option>
+                            <option value="0-2 years">0-2 yearse</option>
+                            <option value="3-5 years">3-5 years</option>
+                        </select>
+                    </div>
+
+
+                    <div class="form-group">
+                        <label for="description">Job Description:</label>
+                        <textarea name="edit_description" id="edit_description" rows="5" cols="60"></textarea>
+                    </div>
+
+
+                    <div class="form-group">
+                        <label for="application_deadline">Application Deadline:</label>
+                        <input type="date" name="edit_application_deadline" id="edit_application_deadline" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="register_count ">Register Count:</label>
+                        <input type="number" name="edit_register_count " id="edit_register_count" required>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="is_active ">Active Status:</label>
+                        <select id="edit_is_active" class="form-control" name="edit_is_active" required>
+                            <option value="True">Active</option>
+                            <option value="False">Inactive</option>
+                        </select>
+                    </div>
+            </div>
+            <div class="modal-footer">
+                <button type="button" class="btn btn-danger" onclick="closeModal()">Cancel</button>
+                <button type="submit" class="btn btn-success" id="saveJobBtn">Post Job</button>
+            </div>
+            </form>
+        </div>
+    </div>
+
+    <!-- Application View Modal -->
+    <div class="modal" id="applicationModal">
+        <div class="modal-content" style="max-width: 800px;">
+            <div class="modal-header">
+                <h2>Application Details</h2>
+                <button class="close-btn" id="closeApplicationModalBtn">&times;</button>
+            </div>
+            <div class="modal-body">
+                <div class="application-details">
+                    <div class="form-group">
+                        <label>Applicant Name:</label>
+                        <p id="applicantName"></p>
+                    </div>
+                    <div class="form-group">
+                        <label>Job Role:</label>
+                        <p id="applicationJobRole"></p>
+                    </div>
+                    <div class="form-group">
+                        <label>Applied Date:</label>
+                        <p id="applicationDate"></p>
+                    </div>
+                    <div class="form-group">
+                        <label>Current Status:</label>
+                        <p id="applicationStatus"></p>
+                    </div>
+                    <div class="form-group">
+                        <label>Resume:</label>
+                        <div class="resume-viewer" id="resumeViewer">
+                            <iframe id="resumeIframe" width="100%" height="100%" style="border:none;"></iframe>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-danger" id="closeApplicationBtn">Close</button>
+            </div>
+        </div>
+    </div>
+
+    <!-- Update Application Modal -->
+    <div class="modal" id="updateApplicationModal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2>Update Application Status</h2>
+                <button class="close-btn" id="closeUpdateApplicationModalBtn">&times;</button>
+            </div>
+            <div class="modal-body">
+                <form id="updateApplicationForm" method="POST" action="">
+                    {% csrf_token %}
+                    <input type="hidden" id="applicationId" name="application_id">
+
+                    <div class="form-group">
+                        <label for="statusUpdate">Status:</label>
+                        <select id="statusUpdate" class="form-control" name="status" required>
+                            <option value="Applied">Applied</option>
+                            <option value="Under Review">Under Review</option>
+                            <option value="Accepted">Accepted</option>
+                            <option value="Rejected">Rejected</option>
+                        </select>
+                    </div>
+
+                    <div class="form-group">
+                        <label for="feedbackUpdate">Feedback:</label>
+                        <textarea id="feedbackUpdate" class="form-control" name="feedback" rows="4"></textarea>
+                    </div>
+                
+            </div>
+            <div class="modal-footer">
+                <button class="btn btn-danger" id="cancelUpdateBtn">Cancel</button>
+                <button type="submit" class="btn btn-success">Save Changes</button>
+            </div>
+        </form>
+        </div>
+    </div>
+
+    <script>
+        // Modal functionality
+        const addJobBtn = document.getElementById('addJobBtn');
+        const closeModalBtn = document.getElementById('closeModalBtn');
+        const cancelBtn = document.getElementById('cancelBtn');
+        const addjobmodal = document.getElementById('addJobModal');
+        const jobsTable = document.getElementById('jobsTable').getElementsByTagName('tbody')[0];
+
+        const viewJobModal = document.getElementById('viewJobModal');
+        const closeJobModalBtn = document.getElementById('closeJobModalBtn')
+        const closeJobViewBtn = document.getElementById('closeJobViewBtn');
+
+
+        const editJobModal = document.getElementById('editJobModal');
+        // const canceleditBtn = document.getElementById('canceleditBtn');
+        const closeeditModalBtn = document.getElementById("closeeditModalBtn")
+
+        addJobBtn.addEventListener('click', () => {
+            addjobmodal.style.display = 'flex';
+        });
+
+        closeModalBtn.addEventListener('click', () => {
+            addjobmodal.style.display = 'none';
+        });
+
+        cancelBtn.addEventListener('click', () => {
+            addjobmodal.style.display = 'none';
+        });
+
+
+
+        closeJobViewBtn.addEventListener('click', () => {
+            viewJobModal.style.display = 'none';
+        });
+
+        closeJobModalBtn.addEventListener('click', () => {
+            viewJobModal.style.display = 'none';
+        });
+
+
+        // canceleditBtn.addEventListener('click', () => {
+        //     editJobModal.style.display = 'none';
+        // });
+
+        closeeditModalBtn.addEventListener('click', () => {
+            editJobModal.style.display = 'none';
+        });
+
+
+        // Close modals when clicking outside
+        window.addEventListener('click', (e) => {
+            if (e.target === addjobmodal) {
+                addjobmodal.style.display = 'none';
+            }
+            if (e.target === applicationModal) {
+                applicationModal.style.display = 'none';
+            }
+            if (e.target === updateApplicationModal) {
+                updateApplicationModal.style.display = 'none';
+            }
+        });
+
+
+        function viewJob(jobId) {
+
+            fetch(`edit-job-details/${jobId}`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(job => {
+
+                    // Format date if needed
+                    const formattedDate = new Date(job.application_deadline).toLocaleDateString();
+
+                    // Populate modal
+                    document.getElementById('vjobrole').textContent = job.job_role;
+                    document.getElementById('vjobtype').textContent = job.job_type;
+                    document.getElementById('vlocation').textContent = job.location;
+                    document.getElementById('vrequiredCGPA').textContent = job.CGPA;
+                    document.getElementById('vLPA').textContent = job.LPA;
+                    document.getElementById('vrequiredskill').textContent = job.required_skill;
+                    document.getElementById('vqualification').textContent = job.qualification;
+                    document.getElementById('vexperience').textContent = job.experience;
+                    document.getElementById('vdescription').textContent = job.description;
+                    document.getElementById('vapplicationdeadline').textContent = formattedDate;
+                    document.getElementById('vregistercount').textContent = job.register_count;
+                    document.getElementById('vjobstatus').textContent = job.status;
+
+                    const vjobstatus = document.getElementById('vjobstatus');
+
+                    if (job.status === true) {
+                        vjobstatus.textContent = 'Active';
+                    } else {
+                        vjobstatus.textContent = 'Inactive';
+                    }
+
+
+                    // Show modal
+                    viewJobModal.style.display = 'flex';
+
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Error loading job details');
+                });
+        }
+
+
+
+        function editJob(jobId) {
+            console.log(jobId)
+
+            fetch(`edit-job-details/${jobId}/`)
+                .then(response => {
+                    if (!response.ok) {
+                        throw new Error('Network response was not ok');
+                    }
+                    return response.json();
+                })
+                .then(job => {
+
+                    // const formattedDate = new Date(job.application_deadline).toLocaleDateString();
+                    const formattedDate = new Date(job.application_deadline).toISOString().split('T')[0];
+
+                    console.log(`iam : ${formattedDate}`)
+                    // Populate form fields
+                    document.getElementById('edit_job_role').value = job.job_role;
+                    document.getElementById('edit_job_type').value = job.job_type;
+                    document.getElementById('edit_location').value = job.location;
+                    document.getElementById('edit_CGPA').value = job.CGPA;
+                    document.getElementById('edit_LPA').value = job.LPA;
+                    document.getElementById('edit_required_skill').value = job.required_skill;
+                    document.getElementById('edit_qualification').value = job.qualification;
+                    document.getElementById('edit_experience').value = job.experience;
+                    document.getElementById('edit_description').value = job.description;
+                    document.getElementById('edit_application_deadline').value = formattedDate;
+                    document.getElementById('edit_register_count').value = job.register_count
+                    document.getElementById('edit_is_active').value = job.status ? 'True' : 'False';
+
+
+
+                    // Update form action
+                    const form = document.getElementById('editjobForm');
+                    form.setAttribute('data-job-id', jobId);
+
+                    // Show modal
+                    editJobModal.style.display = 'flex';
+                })
+                .catch(error => {
+                    console.error('Error:', error);
+                    alert('Error: ' + error.message);
+                });
+        }
+
+
+        // Handle form submission
+        document.getElementById('editjobForm').addEventListener('submit', function (e) {
+            e.preventDefault();
+            const jobId = this.getAttribute('data-job-id');
+            const formData = new FormData(this);
+
+            fetch(`edit-job-details/${jobId}/`, {
+                method: 'POST',
+                body: formData,
+                headers: {
+                    'X-CSRFToken': document.querySelector('[name=csrfmiddlewaretoken]').value
+                }
+            })
+                .then(response => response.json())
+                .then(data => {
+                    alert(data.success || 'Updated!');
+                    editJobModal.style.display = 'none';
+                })
+                .catch(error => {
+                    console.error('Update error:', error);
+                    alert('Error updating job');
+                });
+        });
+
+
+        function closeModal() {
+            document.getElementById('editJobModal').style.display = 'none';
+        }
+
+        //  // Function to add event listeners to action buttons in a row
+        //  function addRowEventListeners(row) {
+        //     const viewBtn = row.querySelector('.btn-primary');
+        //     const editBtn = row.querySelector('.btn-success');
+        //     const deleteBtn = row.querySelector('.btn-danger');
+
+        //     viewBtn.addEventListener('click', () => {
+        //         alert('View job details');
+        //     });
+
+        //     editBtn.addEventListener('click', () => {
+        //         alert('Edit job');
+        //     });
+
+        //     deleteBtn.addEventListener('click', (e) => {
+        //         if (!confirm('Are you sure you want to delete this job?')) {
+        //             e.preventDefault();  // stop form from submitting if user cancels
+        //         }
+        //     });
+        // }
+
+
+
+
+
+
+
+        // Application modals
+        const applicationModal = document.getElementById('applicationModal');
+        const closeApplicationModalBtn = document.getElementById('closeApplicationModalBtn');
+        const closeApplicationBtn = document.getElementById('closeApplicationBtn');
+        const updateApplicationModal = document.getElementById('updateApplicationModal');
+        const closeUpdateApplicationModalBtn = document.getElementById('closeUpdateApplicationModalBtn');
+        const cancelUpdateBtn = document.getElementById('cancelUpdateBtn');
+        // const saveUpdateBtn = document.getElementById('saveUpdateBtn');
+
+
+        // View toggling
+        const applicationsMenuItem = document.getElementById('applicationsMenuItem');
+        const dashboardView = document.getElementById('dashboardView');
+        const applicationsView = document.getElementById('applicationsView');
+
+
+        // Application modal controls
+        closeApplicationModalBtn.addEventListener('click', () => {
+            applicationModal.style.display = 'none';
+        });
+
+        closeApplicationBtn.addEventListener('click', () => {
+            applicationModal.style.display = 'none';
+        });
+
+        closeUpdateApplicationModalBtn.addEventListener('click', () => {
+            updateApplicationModal.style.display = 'none';
+        });
+
+        cancelUpdateBtn.addEventListener('click', () => {
+            updateApplicationModal.style.display = 'none';
+        });
+
+
+        // Status filter functionality
+        document.getElementById('statusFilter').addEventListener('change', function () {
+            const status = this.value.toLowerCase().replace(' ', '');
+            const rows = document.querySelectorAll('#applicationsTable tbody tr');
+
+            rows.forEach(row => {
+                const rowStatus = row.querySelector('.status').className.includes(status);
+                if (!status || rowStatus) {
+                    row.style.display = '';
+                } else {
+                    row.style.display = 'none';
+                }
+            });
+        });
+
+        // View application details
+        function viewApplication(user, role, date, status, resume) {
+            // In a real application, you would fetch this data from the server
+            // For this example, we'll use the first application in the list
+            console.log(resume)
+            const application = {
+                applicantName: user,
+                jobRole: role,
+                appliedDate: date,
+                status: status,
+                resumeUrl: `resumes/${resume}`
+            };
+
+            document.getElementById('applicantName').textContent = application.applicantName;
+            document.getElementById('applicationJobRole').textContent = application.jobRole;
+            document.getElementById('applicationDate').textContent = application.appliedDate;
+            document.getElementById('applicationStatus').textContent = application.status;
+
+            // Set the resume iframe source
+            document.getElementById('resumeIframe').src = application.resumeUrl;
+
+            applicationModal.style.display = 'flex';
+        }
+
+        // Update application status
+        function updateApplication(applicationId) {
+            // In a real application, you would fetch the current status and feedback
+            document.getElementById('applicationId').value = applicationId;
+            document.getElementById('statusUpdate').value = "Under Review";
+            document.getElementById('feedbackUpdate').value = "we will contact shortly";
+
+            // Set the form action dynamically
+            const baseUrl = "{% url 'update_application' 0 %}".replace('0', applicationId);
+            document.getElementById('updateApplicationForm').action = baseUrl;
+
+            updateApplicationModal.style.display = 'flex';
+        }
+
+
+
+
+
+
+
+        // Menu item active state and view switching
+        const menuItems = document.querySelectorAll('.menu-item');
+
+        menuItems.forEach(item => {
+            item.addEventListener('click', () => {
+                // Remove active class from all items
+                menuItems.forEach(i => i.classList.remove('active'));
+                // Add active class to clicked item
+                item.classList.add('active');
+
+                // Switch views based on clicked item
+                if (item === applicationsMenuItem) {
+                    dashboardView.style.display = 'none';
+                    applicationsView.style.display = 'block';
+                } else {
+                    dashboardView.style.display = 'block';
+                    applicationsView.style.display = 'none';
+                }
+            });
+        });
+
+
+
+
+        // Add event listeners to existing rows
+        document.querySelectorAll('#jobsTable tbody tr').forEach(row => {
+            addRowEventListeners(row);
+        });
+    </script>
+</body>
+
+</html>
